@@ -1,21 +1,25 @@
+#!/usr/bin/python
 # Zac Schneider
 # CSC 498
 
 import sqlite3 
+from sqlite3 import Error
+from _sqlite3 import Row
 
 class Concertsmaster:
     """ Create a working interface to the database """
     
-    def __init__(self, test=False):
+    def __init__(self):
         """ Make a connection to the database """
         
-        if test:
-            self.dbname = ":memory:"
-        else:
-            self.dbname = "concertsmaster.sqlite"
+        try:
+            self.conn = sqlite3.connect("concertsmaster.sqlite")
+            
+        except Error as e:
+            print(e)
         
-        self.conn = sqlite3.connect(self.dbname)
-        
+    
+    
     def cursor(self):
         """ Create a cursor for the database """
         
@@ -32,5 +36,11 @@ db = Concertsmaster()
 
 cursor = db.cursor()
 
-cursor.execute("select distinct YEAR from EVENTS")
+cursor.execute("SELECT * FROM EVENTS")
+
+rows = cursor.fetchall()
+
+for row in rows:
+    print(row)
+    
 
